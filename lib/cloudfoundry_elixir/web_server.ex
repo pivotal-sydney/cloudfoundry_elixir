@@ -5,7 +5,8 @@ defmodule CloudfoundryElixir.WebServer do
   plug :match
   plug :dispatch
 
-  def start_link(port, _) do
+  def start_link do
+    {port, _} = Integer.parse(System.get_env("PORT"))
     Plug.Adapters.Cowboy.http __MODULE__, [], [port: port]
   end
 

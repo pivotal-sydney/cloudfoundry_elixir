@@ -6,10 +6,8 @@ defmodule CloudfoundryElixir do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-    {port, _} = Integer.parse(System.get_env("PORT"))
-
     children = [
-      worker(CloudfoundryElixir.WebServer, [port, []]),
+      worker(CloudfoundryElixir.WebServer, []),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
