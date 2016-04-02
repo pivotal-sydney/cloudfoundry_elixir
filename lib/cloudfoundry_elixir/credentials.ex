@@ -1,5 +1,4 @@
 defmodule CloudfoundryElixir.Credentials do
-  @vcap_services Poison.decode!(System.get_env("VCAP_SERVICES") || "{}")
 
   @doc """
     Find the credentials for the all services that have the given tag. Returns
@@ -7,7 +6,7 @@ defmodule CloudfoundryElixir.Credentials do
   """
   @spec find_all_by_service_tag(tag :: String.t) :: map | nil
   def find_all_by_service_tag(tag) when is_binary(tag) do
-    find_all_by_service_tag(@vcap_services, tag)
+    find_all_by_service_tag(vcap_services, tag)
   end
 
   @doc """
@@ -16,7 +15,7 @@ defmodule CloudfoundryElixir.Credentials do
   """
   @spec find_by_service_tag(tag :: String.t) :: map | nil
   def find_by_service_tag(tag) when is_binary(tag) do
-    find_by_service_tag(@vcap_services, tag)
+    find_by_service_tag(vcap_services, tag)
   end
 
   @spec find_all_by_service_tag(services_data :: map, tag :: String.t) :: map | nil
@@ -27,6 +26,10 @@ defmodule CloudfoundryElixir.Credentials do
   @spec find_by_service_tag(services_data :: map, tag :: String.t) :: map | nil
   def find_by_service_tag(services_data, tag) when is_map(services_data) and is_binary(tag) do
     find_all_by_service_tag(services_data, tag) |> Enum.take(1) |> List.first
+  end
+
+  def vcap_services do
+    Poison.decode!(System.get_env("VCAP_SERVICES") || "{}")
   end
 
   defp find_by_tag_in_service(service, tag) do
